@@ -4,6 +4,8 @@
 
 A 2D game engine written in C# for use in my games that I'm releasing to the public. (Runs in dotnet core)
 
+It is inspired by the style of game development shown in Gamemaker 7, 8, and 8.1, but is only code, not a GUI.
+
 ## Run
 
 To run the test game, open a terminal in the test folder and run `dotnet run`
