@@ -6,7 +6,9 @@ A 2D game engine written in C# for use in my games that I'm releasing to the pub
 
 ## Run
 
-To run the game, run `dotnet run` in a terminal
+To run the test game, open a terminal in the test folder and run `dotnet run`
+
+To build the library, open a terminal in the EksedraEngine folder and run `dotnet build`
 
 Requires SFML.net nuget package
 
