@@ -3,7 +3,7 @@ using SFML.System;
 using System;
 
 namespace EksedraEngine {
-    class EksedraSprite : Drawable {
+    public class EksedraSprite : Drawable {
         public float ImageSpeed;
         public float ImageIndex;
 

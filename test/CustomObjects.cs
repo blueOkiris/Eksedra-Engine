@@ -4,8 +4,9 @@ using System;
 using System.Linq;
 using SFML.System;
 using System.IO;
+using EksedraEngine;
 
-namespace EksedraEngine {
+namespace test {
     /*class ObjectName : GameObject {
         public override void Draw(RenderTarget target, RenderStates states) {}
         public override void Init() {}

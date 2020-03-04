@@ -17,7 +17,7 @@ using System.Diagnostics.CodeAnalysis;
  *  - Keyboard control methods
  */
 namespace EksedraEngine {
-    abstract class GameObject : Drawable, IComparable<GameObject> {
+    public abstract class GameObject : Drawable, IComparable<GameObject> {
         public float X, Y, HSpeed, VSpeed, Dir;
         public float MaskX, MaskY, MaskWidth, MaskHeight;
         
@@ -72,7 +72,7 @@ namespace EksedraEngine {
             Depth = depth;
             RunningEngine = engine;
             Persistant = false;
-
+            Tag = "";
             Timers = new float[10] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         }
         public virtual int CompareTo(GameObject other) => other.Depth.CompareTo(Depth);

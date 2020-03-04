@@ -6,7 +6,7 @@ using SFML.System;
 using SFML.Window;
 
 namespace EksedraEngine {
-    class Engine {
+    public class Engine {
         private List<GameObject> GameObjects;
         public int CurrentRoom = 0;
         public List<Vector2f> RoomSizes;

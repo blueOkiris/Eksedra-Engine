@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using SFML.System;
+using EksedraEngine;
 
-namespace EksedraEngine {
+namespace test {
     class Program {
         static void Main(string[] args) {
             // Add persistant objects

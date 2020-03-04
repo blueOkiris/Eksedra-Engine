@@ -1,0 +1,8 @@
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\EksedraEngine\obj\Debug\netstandard2.0\EksedraEngine.csprojAssemblyReference.cache
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\EksedraEngine\obj\Debug\netstandard2.0\EksedraEngine.AssemblyInfoInputs.cache
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\EksedraEngine\obj\Debug\netstandard2.0\EksedraEngine.AssemblyInfo.cs
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\EksedraEngine\bin\Debug\netstandard2.0\EksedraEngine.deps.json
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\EksedraEngine\bin\Debug\netstandard2.0\EksedraEngine.dll
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\EksedraEngine\bin\Debug\netstandard2.0\EksedraEngine.pdb
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\EksedraEngine\obj\Debug\netstandard2.0\EksedraEngine.dll
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\EksedraEngine\obj\Debug\netstandard2.0\EksedraEngine.pdb
