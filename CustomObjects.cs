@@ -132,9 +132,9 @@ namespace EksedraEngine {
 
     class Player : GameObject {
         private float MoveSpeed = 256;
-        private float Gravity = 4096;
-        private float MaxVSpeed = 4096;
-        private float JumpSpeed = 1024;
+        private float Gravity = 3000;
+        private float MaxVSpeed = 3000;
+        private float JumpSpeed = 800;
         private bool IsGrounded = false;
 
         public override void EarlyUpdate(float deltaTime) {}
@@ -160,7 +160,7 @@ namespace EksedraEngine {
                                                 new IntRect(0, 404, 120, 116)
                                             });
             PlayerFall = new EksedraSprite("images/link-minish.png", new IntRect[] {
-                                                new IntRect(120 * 8, 924, 120, 116)
+                                                new IntRect(120 * 7, 924, 120, 116)
                                             });
             PlayerRun = new EksedraSprite("images/link-minish.png", new IntRect[] {
                                                 new IntRect(0, 924, 120, 116),
@@ -179,9 +179,9 @@ namespace EksedraEngine {
 
             SpriteIndex = PlayerStand;
             ImageSpeed = 15;
-            MaskX = -14;
+            MaskX = -22;
             MaskY = -30;
-            MaskWidth = 36;
+            MaskWidth = 44;
             MaskHeight = 60;
 
             Persistant = true;
@@ -193,28 +193,28 @@ namespace EksedraEngine {
             if(other.Tag == "Rock") {
                 if(other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 > Y + 29 && VSpeed > 0) {
                     VSpeed = 0;
-                    Y = other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 - 30.05f;
+                    Y = other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 - 30.25f;
                     IsGrounded = true;
                 }
                 
                 if(other.Y + other.SpriteIndex.GetCurrentRect().Height / 2 < Y - 29 && VSpeed < 0) {
                     VSpeed = 0;
-                    Y = other.Y + other.SpriteIndex.GetCurrentRect().Height / 2 + 30.05f;
+                    Y = other.Y + other.SpriteIndex.GetCurrentRect().Height / 2 + 30.25f;
                 }
                 
-                if(other.X - other.SpriteIndex.GetCurrentRect().Width / 2 > X + 13 && HSpeed > 0) {
+                if(other.X - other.SpriteIndex.GetCurrentRect().Width / 2 > X + 21 && HSpeed > 0) {
                     HSpeed = 0;
-                    X = other.X - other.SpriteIndex.GetCurrentRect().Width / 2 - 14.05f;
+                    X = other.X - other.SpriteIndex.GetCurrentRect().Width / 2 - 24f;
                 }
                 
-                if(other.X + other.SpriteIndex.GetCurrentRect().Width / 2 < X - 13 && HSpeed < 0) {
+                if(other.X + other.SpriteIndex.GetCurrentRect().Width / 2 < X - 21 && HSpeed < 0) {
                     HSpeed = 0;
-                    X = other.X + other.SpriteIndex.GetCurrentRect().Width / 2 + 14.05f;
+                    X = other.X + other.SpriteIndex.GetCurrentRect().Width / 2 + 24f;
                 }
             } else if(other.Tag == "JumpThrough") {
                 if(other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 > Y + 29 && VSpeed > 0) {
                     VSpeed = 0;
-                    Y = other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 - 30.05f;
+                    Y = other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 - 30.25f;
                     IsGrounded = true;
                 }
             }
@@ -226,17 +226,17 @@ namespace EksedraEngine {
 
         public override void Update(float deltaTime) {
             //Console.WriteLine(RunningEngine.GetWindowWidth() + ", " + RunningEngine.GetWindowHeight());
-            if(X + SpriteIndex.GetCurrentRect().Width / 2 > RunningEngine.RoomSizes[RunningEngine.CurrentRoom].X) {
-                X = RunningEngine.RoomSizes[RunningEngine.CurrentRoom].X - SpriteIndex.GetCurrentRect().Width / 2;
+            if(X + MaskX + MaskWidth > RunningEngine.RoomSizes[RunningEngine.CurrentRoom].X) {
+                X = RunningEngine.RoomSizes[RunningEngine.CurrentRoom].X - MaskX - MaskWidth;
                 HSpeed = 0;
-            } else if(X - SpriteIndex.GetCurrentRect().Width / 2 < 0) {
-                X = SpriteIndex.GetCurrentRect().Width / 2;
+            } else if(X + MaskX < 0) {
+                X = -MaskX;
                 HSpeed = 0;
-            } else if(Y + SpriteIndex.GetCurrentRect().Height / 2 > RunningEngine.RoomSizes[RunningEngine.CurrentRoom].Y) {
-                Y = RunningEngine.RoomSizes[RunningEngine.CurrentRoom].Y - SpriteIndex.GetCurrentRect().Height / 2;
+            } else if(Y + MaskY + MaskHeight > RunningEngine.RoomSizes[RunningEngine.CurrentRoom].Y) {
+                Y = RunningEngine.RoomSizes[RunningEngine.CurrentRoom].Y - MaskY - MaskHeight;
                 VSpeed = 0;
-            } else if(Y - SpriteIndex.GetCurrentRect().Height / 2 < 0) {
-                Y = SpriteIndex.GetCurrentRect().Height / 2;
+            } else if(Y + MaskY < 0) {
+                Y = -MaskY;
                 VSpeed = 0;
             }
 
