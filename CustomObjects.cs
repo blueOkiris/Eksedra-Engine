@@ -131,10 +131,10 @@ namespace EksedraEngine {
     }
 
     class Player : GameObject {
-        private float MoveSpeed = 512;
+        private float MoveSpeed = 256;
         private float Gravity = 4096;
-        private float MaxVSpeed = 8192;
-        private float JumpSpeed = 1300;
+        private float MaxVSpeed = 4096;
+        private float JumpSpeed = 1024;
         private bool IsGrounded = false;
 
         public override void EarlyUpdate(float deltaTime) {}
@@ -156,22 +156,33 @@ namespace EksedraEngine {
             Room = 0;
             Depth = 0;
 
-            PlayerStand = new EksedraSprite("images/player.png", new IntRect[] {
-                                                new IntRect(1, 1, 64, 64),
-                                                new IntRect(131, 1, 64, 64)
+            PlayerStand = new EksedraSprite("images/link-minish.png", new IntRect[] {
+                                                new IntRect(0, 404, 120, 116)
                                             });
-            PlayerFall = new EksedraSprite("images/player.png", new IntRect[] { new IntRect(66, 1, 64, 64) });
-            PlayerRun = new EksedraSprite("images/player.png", new IntRect[] {
-                                                new IntRect(1, 66, 64, 64),
-                                                new IntRect(66, 66, 64, 64)
+            PlayerFall = new EksedraSprite("images/link-minish.png", new IntRect[] {
+                                                new IntRect(120 * 8, 924, 120, 116)
                                             });
+            PlayerRun = new EksedraSprite("images/link-minish.png", new IntRect[] {
+                                                new IntRect(0, 924, 120, 116),
+                                                new IntRect(120, 924, 120, 116),
+                                                new IntRect(120 * 2, 924, 120, 116),
+                                                new IntRect(120 * 3, 924, 120, 116),
+                                                new IntRect(120 * 4, 924, 120, 116),
+                                                new IntRect(120 * 5, 924, 120, 116),
+                                                new IntRect(120 * 6, 924, 120, 116),
+                                                new IntRect(120 * 7, 924, 120, 116),
+                                                new IntRect(120 * 8, 924, 120, 116),
+                                                new IntRect(120 * 9, 924, 120, 116),
+                                            });
+            ImageScaleX = 0.5333f;
+            ImageScaleY = 0.5333f;
 
             SpriteIndex = PlayerStand;
-            ImageSpeed = 10;
-            MaskX = -16;
-            MaskY = -32;
-            MaskWidth = 32;
-            MaskHeight = 64;
+            ImageSpeed = 15;
+            MaskX = -14;
+            MaskY = -30;
+            MaskWidth = 36;
+            MaskHeight = 60;
 
             Persistant = true;
         }
@@ -180,30 +191,30 @@ namespace EksedraEngine {
             //Console.WriteLine("Player collision with: " + other.Tag);
             //File.AppendAllText("log.txt", "Rock: " + (other.Y - other.SpriteIndex.GetCurrentRect().Height / 2) + "\n" + "Plyr: " + (Y + SpriteIndex.GetCurrentRect().Height / 2) + "\n");
             if(other.Tag == "Rock") {
-                if(other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 > Y + 31 && VSpeed > 0) {
+                if(other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 > Y + 29 && VSpeed > 0) {
                     VSpeed = 0;
-                    Y = other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 - 33;
+                    Y = other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 - 30.05f;
                     IsGrounded = true;
                 }
                 
-                if(other.Y + other.SpriteIndex.GetCurrentRect().Height / 2 < Y - 31 && VSpeed < 0) {
+                if(other.Y + other.SpriteIndex.GetCurrentRect().Height / 2 < Y - 29 && VSpeed < 0) {
                     VSpeed = 0;
-                    Y = other.Y + other.SpriteIndex.GetCurrentRect().Height / 2 + 32;
+                    Y = other.Y + other.SpriteIndex.GetCurrentRect().Height / 2 + 30.05f;
                 }
                 
-                if(other.X - other.SpriteIndex.GetCurrentRect().Width / 2 > X + 15 && HSpeed > 0) {
+                if(other.X - other.SpriteIndex.GetCurrentRect().Width / 2 > X + 13 && HSpeed > 0) {
                     HSpeed = 0;
-                    X = other.X - other.SpriteIndex.GetCurrentRect().Width / 2 - 16;
+                    X = other.X - other.SpriteIndex.GetCurrentRect().Width / 2 - 14.05f;
                 }
                 
-                if(other.X + other.SpriteIndex.GetCurrentRect().Width / 2 < X - 15 && HSpeed < 0) {
+                if(other.X + other.SpriteIndex.GetCurrentRect().Width / 2 < X - 13 && HSpeed < 0) {
                     HSpeed = 0;
-                    X = other.X + other.SpriteIndex.GetCurrentRect().Width / 2 + 16;
+                    X = other.X + other.SpriteIndex.GetCurrentRect().Width / 2 + 14.05f;
                 }
             } else if(other.Tag == "JumpThrough") {
-                if(other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 > Y + 31 && VSpeed > 0) {
+                if(other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 > Y + 29 && VSpeed > 0) {
                     VSpeed = 0;
-                    Y = other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 - 33;
+                    Y = other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 - 30.05f;
                     IsGrounded = true;
                 }
             }
@@ -239,9 +250,9 @@ namespace EksedraEngine {
                 SpriteIndex = PlayerFall;
             
             if(HSpeed > 0)
-                ImageScaleX = 1;
+                ImageScaleX = Math.Abs(ImageScaleX);
             else if(HSpeed < 0)
-                ImageScaleX = -1;
+                ImageScaleX = -Math.Abs(ImageScaleX);
 
             // Move the view
             if(X - RunningEngine.ViewPort.Width / 2 < 0)

@@ -19,9 +19,12 @@ namespace EksedraEngine {
                 for(int i = j; i < (1280 / 2) / 64; i++)
                     gameObjects.Add(new Rock(32 + i * 64 + (1280 / 2), 720 / 2 - 64 * j, 0));
             }
-            gameObjects.Add(new JumpThrough(32 + 5 * 64, 720 - 3 * 64, 0));
-            gameObjects.Add(new JumpThrough(32 + 6 * 64, 720 - 3 * 64, 0));
-            gameObjects.Add(new JumpThrough(32 + 7 * 64, 720 - 3 * 64, 0));
+            gameObjects.Add(new JumpThrough(6 * 64, 720 - 2 * 64, 0));
+            gameObjects.Add(new JumpThrough(7 * 64, 720 - 2 * 64, 0));
+            gameObjects.Add(new JumpThrough(7 * 64, 720 - 3 * 64, 0));
+            gameObjects.Add(new JumpThrough(8 * 64, 720 - 3 * 64, 0));
+            gameObjects.Add(new JumpThrough(8 * 64, 720 - 4 * 64, 0));
+            gameObjects.Add(new JumpThrough(9 * 64, 720 - 4 * 64, 0));
 
             // Add a mini level layout for room 1 (just floor, but longer)
             for(int i = 0; i < 2560 / 64; i++)
