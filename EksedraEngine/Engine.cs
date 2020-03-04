@@ -116,7 +116,6 @@ namespace EksedraEngine {
 
             while((self as Engine).GetWindow().IsOpen) {
                 DeltaTime = clock.ElapsedTime.AsSeconds();
-                //Console.WriteLine(DeltaTime);
                 clock.Restart();
 
                 foreach(GameObject gameObject in (self as Engine).GetGameObjects()) {

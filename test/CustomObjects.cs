@@ -132,10 +132,10 @@ namespace test {
     }
 
     class Player : GameObject {
-        private float MoveSpeed = 256;
-        private float Gravity = 3000;
-        private float MaxVSpeed = 3000;
-        private float JumpSpeed = 800;
+        private float MoveSpeed = 150;
+        private float Gravity = 600;
+        private float MaxVSpeed = 400;
+        private float JumpSpeed = 370;
         private bool IsGrounded = false;
 
         public override void EarlyUpdate(float deltaTime) {}
@@ -179,7 +179,7 @@ namespace test {
             ImageScaleY = 0.5333f;
 
             SpriteIndex = PlayerStand;
-            ImageSpeed = 15;
+            ImageSpeed = 10;
             MaskX = -22;
             MaskY = -30;
             MaskWidth = 44;
