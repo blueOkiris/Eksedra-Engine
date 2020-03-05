@@ -2,6 +2,7 @@ using EksedraEngine;
 using SFML.System;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace test {
     struct Map {
@@ -18,7 +19,7 @@ namespace test {
         // Individual rooms
         public static Map Room0() {
             // Add persistant objects
-            List<GameObject> gameObjects = new List<GameObject>();
+            /*List<GameObject> gameObjects = new List<GameObject>();
             gameObjects.Add(new ControlObject(0));
             gameObjects.Add(new Player(32 + 3 * 64, 720 - 2 * 64, 0));
 
@@ -39,7 +40,17 @@ namespace test {
             gameObjects.Add(new JumpThrough(8 * 64, 720 - 4 * 64, 0));
             gameObjects.Add(new JumpThrough(9 * 64, 720 - 4 * 64, 0));
 
-            return new Map(gameObjects, new Vector2f(1280, 720));
+            return new Map(gameObjects, new Vector2f(1280, 720));*/
+            
+            GameRoom rm0 = Engine.RoomFromFile(
+                                    "rooms/room0.rm",
+                                    new List<Type>() {
+                                        typeof(ControlObject),
+                                        typeof(Player),
+                                        typeof(Rock),
+                                        typeof(JumpThrough)
+                                    });
+            return new Map(rm0.GameObjects, rm0.RoomSize);
         }
 
         public static Map Room1() {

@@ -1,7 +1,5 @@
 using SFML.Graphics;
-using System.Collections.Generic;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 /*
  * Base object for all other game objects

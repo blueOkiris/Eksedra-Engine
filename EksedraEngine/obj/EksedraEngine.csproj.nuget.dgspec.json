@@ -38,6 +38,14 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "Microsoft.CodeAnalysis": {
+              "target": "Package",
+              "version": "[3.4.0, )"
+            },
+            "Microsoft.CodeAnalysis.Scripting": {
+              "target": "Package",
+              "version": "[3.4.0, )"
+            },
             "SFML.Net": {
               "target": "Package",
               "version": "[2.5.0, )"

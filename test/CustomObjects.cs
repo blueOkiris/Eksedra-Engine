@@ -25,7 +25,7 @@ namespace test {
         }
     }*/
 
-    class ControlObject : GameObject {
+    public class ControlObject : GameObject {
         public override void Draw(RenderTarget target, RenderStates states) {}
         public override void EarlyUpdate(float deltaTime) {}
         public override void LateUpdate(float deltaTime) {}
@@ -50,7 +50,7 @@ namespace test {
         }
     }
 
-    class JumpThrough : GameObject {
+    public class JumpThrough : GameObject {
         public override void EarlyUpdate(float deltaTime) {}
         public override void Update(float deltaTime) {}
         public override void LateUpdate(float deltaTime) {}
@@ -89,7 +89,7 @@ namespace test {
         }
     }
 
-    class Rock : GameObject {
+    public class Rock : GameObject {
         public override void EarlyUpdate(float deltaTime) {}
         public override void LateUpdate(float deltaTime) {}
         public override void OnKeyUp(bool[] keyState) {}
@@ -131,7 +131,7 @@ namespace test {
         }
     }
 
-    class Player : GameObject {
+    public class Player : GameObject {
         private float MoveSpeed = 150;
         private float Gravity = 600;
         private float MaxVSpeed = 400;

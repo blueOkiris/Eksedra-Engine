@@ -4,8 +4,22 @@ using System.Threading;
 using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
+using System.IO;
+using System.Linq;
 
 namespace EksedraEngine {
+    public class GameRoom {
+        public List<GameObject> GameObjects;
+        public Vector2f RoomSize;
+
+        public GameRoom(List<GameObject> gameObjects, Vector2f roomSize) {
+            GameObjects = gameObjects;
+            RoomSize = roomSize;
+        }
+    }
+
     public class Engine {
         private List<GameObject> GameObjects;
         public int CurrentRoom = 0;
@@ -45,6 +59,24 @@ namespace EksedraEngine {
             }
 
             ViewPort = new FloatRect(0, 0, WindowWidth / 2, WindowHeight / 2);
+        }
+
+        public static GameRoom RoomFromFile(string fileName, List<Type> gameObjectTypes) {
+            string roomCode = File.ReadAllText(fileName);
+            var asm = AppDomain.CurrentDomain.GetAssemblies().SingleOrDefault(assembly => assembly.GetName().Name == "EksedraEngine");
+            ScriptOptions options = ScriptOptions.Default.WithImports(new List<string>() {
+                                        "System.Collections.Generic",
+                                        "SFML.System",
+                                        "EksedraEngine",
+                                        "test"
+                                    }).AddReferences(asm);
+            foreach(Type t in gameObjectTypes)
+                options = options.AddReferences(t.Assembly);
+
+            Script<GameRoom> script = CSharpScript.Create<GameRoom>(roomCode, options);
+            script.Compile();
+
+            return script.RunAsync().Result.ReturnValue;
         }
 
         public RenderWindow GetWindow() => Window;
