@@ -1,3 +1,7 @@
+/*
+ * This file is used to make custom game objects (children of base GameObject)
+ * These are instantiated in room files at the start of the application
+ */
 using SFML.Window;
 using SFML.Graphics;
 using System;

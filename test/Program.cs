@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * This is a user side application.
+ * After adding my library, they simply create the engine, and run it.
+ * Engine takes window size, title, start room, and custom objects that room files contain"
+ */
+using System.Collections.Generic;
 using SFML.System;
 using EksedraEngine;
 using System;
