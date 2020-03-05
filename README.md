@@ -20,4 +20,4 @@ Requires SFML.net nuget package
 
 For fun I use Link from the Legend of Zelda Minish Cap. That sprite as well as the character itself are owned by Nintendo
 
-I want to make clear that I use these sprites not in a professional capacity, and used them for the sake of example
+I want to make clear that I DO NOT use these sprites in a professional capacity, instead using them for the sake of example
