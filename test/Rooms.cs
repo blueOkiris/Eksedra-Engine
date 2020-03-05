@@ -43,7 +43,7 @@ namespace test {
             return new Map(gameObjects, new Vector2f(1280, 720));*/
             
             GameRoom rm0 = Engine.RoomFromFile(
-                                    "rooms/room0.rm",
+                                    "rooms/0.rm",
                                     new List<Type>() {
                                         typeof(ControlObject),
                                         typeof(Player),
@@ -54,13 +54,23 @@ namespace test {
         }
 
         public static Map Room1() {
-            List<GameObject> gameObjects = new List<GameObject>();
+            /*List<GameObject> gameObjects = new List<GameObject>();
 
             // Add a mini level layout for room 1 (just floor, but longer)
             for(int i = 0; i < 2560 / 64; i++)
                 gameObjects.Add(new Rock(32 + i * 64, 720 - 32, 1));
         
-            return new Map(gameObjects, new Vector2f(2560, 720));
+            return new Map(gameObjects, new Vector2f(2560, 720));*/
+            
+            GameRoom rm1 = Engine.RoomFromFile(
+                                    "rooms/1.rm",
+                                    new List<Type>() {
+                                        typeof(ControlObject),
+                                        typeof(Player),
+                                        typeof(Rock),
+                                        typeof(JumpThrough)
+                                    });
+            return new Map(rm1.GameObjects, rm1.RoomSize);
         }
 
         // Get all the map data together
