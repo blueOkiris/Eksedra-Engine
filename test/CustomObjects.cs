@@ -44,8 +44,7 @@ namespace test {
             if(keyState[(int) Keyboard.Key.Escape])
                 RunningEngine.SetQuit(true);
         }
-        public ControlObject(int room) {
-            Room = room;
+        public ControlObject() {
             Persistant = true;
         }
     }
@@ -64,10 +63,9 @@ namespace test {
             //Console.WriteLine("Rock collision with: " + other.Tag);
         }
 
-        public JumpThrough(int x, int y, int room) {
+        public JumpThrough(int x, int y) {
             X = x;
             Y = y;
-            Room = room;
         }
         
         public override void Init() {
@@ -102,10 +100,9 @@ namespace test {
             //Console.WriteLine("Rock collision with: " + other.Tag);
         }
 
-        public Rock(int x, int y, int room) {
+        public Rock(int x, int y) {
             X = x;
             Y = y;
-            Room = room;
         }
         
         public override void Init() {
@@ -145,16 +142,14 @@ namespace test {
 
         private EksedraSprite PlayerStand, PlayerFall, PlayerRun;
 
-        public Player(int x, int y, int room) {
-            Room = room;
-
+        public Player(int x, int y) {
             X = x;
             Y = y;
+            Persistant = true;
         }
 
         public override void Init() {
             Tag = "Player";
-            Room = 0;
             Depth = 0;
 
             PlayerStand = new EksedraSprite("images/link-minish.png", new IntRect[] {
@@ -184,8 +179,6 @@ namespace test {
             MaskY = -30;
             MaskWidth = 44;
             MaskHeight = 60;
-
-            Persistant = true;
         }
 
         public override void OnCollision(GameObject other) {
@@ -227,14 +220,14 @@ namespace test {
 
         public override void Update(float deltaTime) {
             //Console.WriteLine(RunningEngine.GetWindowWidth() + ", " + RunningEngine.GetWindowHeight());
-            if(X + MaskX + MaskWidth > RunningEngine.RoomSizes[RunningEngine.CurrentRoom].X) {
-                X = RunningEngine.RoomSizes[RunningEngine.CurrentRoom].X - MaskX - MaskWidth;
+            if(X + MaskX + MaskWidth > RunningEngine.GetRoomSize().X) {
+                X = RunningEngine.GetRoomSize().X - MaskX - MaskWidth;
                 HSpeed = 0;
             } else if(X + MaskX < 0) {
                 X = -MaskX;
                 HSpeed = 0;
-            } else if(Y + MaskY + MaskHeight > RunningEngine.RoomSizes[RunningEngine.CurrentRoom].Y) {
-                Y = RunningEngine.RoomSizes[RunningEngine.CurrentRoom].Y - MaskY - MaskHeight;
+            } else if(Y + MaskY + MaskHeight > RunningEngine.GetRoomSize().Y) {
+                Y = RunningEngine.GetRoomSize().Y - MaskY - MaskHeight;
                 VSpeed = 0;
             } else if(Y + MaskY < 0) {
                 Y = -MaskY;
@@ -258,15 +251,15 @@ namespace test {
             // Move the view
             if(X - RunningEngine.ViewPort.Width / 2 < 0)
                 RunningEngine.ViewPort.Left = 0;
-            else if(X + RunningEngine.ViewPort.Width / 2 > RunningEngine.RoomSizes[RunningEngine.CurrentRoom].X)
-                RunningEngine.ViewPort.Left = RunningEngine.RoomSizes[RunningEngine.CurrentRoom].X - RunningEngine.ViewPort.Width;
+            else if(X + RunningEngine.ViewPort.Width / 2 > RunningEngine.GetRoomSize().X)
+                RunningEngine.ViewPort.Left = RunningEngine.GetRoomSize().X - RunningEngine.ViewPort.Width;
             else
                 RunningEngine.ViewPort.Left = X - RunningEngine.ViewPort.Width / 2;
 
             if(Y - RunningEngine.ViewPort.Height / 2 < 0)
                 RunningEngine.ViewPort.Top = 0;
-            else if(Y + RunningEngine.ViewPort.Height / 2 > RunningEngine.RoomSizes[RunningEngine.CurrentRoom].Y)
-                RunningEngine.ViewPort.Top = RunningEngine.RoomSizes[RunningEngine.CurrentRoom].Y - RunningEngine.ViewPort.Height;
+            else if(Y + RunningEngine.ViewPort.Height / 2 > RunningEngine.GetRoomSize().Y)
+                RunningEngine.ViewPort.Top = RunningEngine.GetRoomSize().Y - RunningEngine.ViewPort.Height;
             else
                 RunningEngine.ViewPort.Top = Y - RunningEngine.ViewPort.Height / 2;
         }
@@ -275,10 +268,10 @@ namespace test {
             if(keyState[(int) Keyboard.Key.Up] && IsGrounded) {
                 VSpeed = -JumpSpeed;
                 IsGrounded = false;
-            } else if(keyState[(int) Keyboard.Key.N] && RunningEngine.CurrentRoom < RunningEngine.RoomSizes.Count - 1)
-                RunningEngine.CurrentRoom++;
-            else if(keyState[(int) Keyboard.Key.P] && RunningEngine.CurrentRoom > 0)
-                RunningEngine.CurrentRoom--;
+            } else if(keyState[(int) Keyboard.Key.LShift] && RunningEngine.CurrentRoom == "test")
+                RunningEngine.CurrentRoom = "wide_floor";
+            else if(keyState[(int) Keyboard.Key.LShift] && RunningEngine.CurrentRoom == "wide_floor")
+                RunningEngine.CurrentRoom = "test";
         }
 
         public override void OnKeyHeld(bool[] keyState) {

@@ -7,7 +7,7 @@ namespace test {
     class Program {
         static void Main(string[] args) {
             Engine engine = new Engine(
-                                1280, 720, "Eksedra Engine", 
+                                1280, 720, "Eksedra Engine", "test", 
                                 new List<Type>() {
                                     typeof(ControlObject),
                                     typeof(Player),

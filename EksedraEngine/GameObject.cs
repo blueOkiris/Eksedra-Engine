@@ -25,7 +25,7 @@ namespace EksedraEngine {
 
         public float[] Timers;
 
-        public int Room, Depth;
+        public int Depth;
         public bool Persistant;
         public Engine RunningEngine;
 
@@ -66,7 +66,7 @@ namespace EksedraEngine {
             ImageSpeed = imageSpeed;
             ImageScaleX = imageScaleX;
             ImageScaleY = imageScaleY;
-            Room = room;
+            
             Depth = depth;
             RunningEngine = engine;
             Persistant = false;

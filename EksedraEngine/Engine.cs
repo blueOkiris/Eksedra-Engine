@@ -21,9 +21,10 @@ namespace EksedraEngine {
     }
 
     public class Engine {
-        private List<GameObject> GameObjects;
-        public int CurrentRoom = 0;
-        public List<Vector2f> RoomSizes;
+        private Dictionary<string, List<GameObject>> GameObjects;
+        private List<GameObject> PersistantObjects;
+        private Dictionary<string, Vector2f> RoomSizes;
+        public string CurrentRoom;
 
         private uint WindowWidth, WindowHeight;
         private string WindowTitle;
@@ -36,7 +37,8 @@ namespace EksedraEngine {
 
         public FloatRect ViewPort;
 
-        public Engine(uint windowWidth, uint windowHeight, string windowTitle, List<Type> customGameObjectTypes) {
+        public Engine(uint windowWidth, uint windowHeight, string windowTitle, string startRoom, List<Type> customGameObjectTypes) {
+            CurrentRoom = startRoom;
             LoadAllRooms(customGameObjectTypes);
 
             WindowWidth = windowWidth;
@@ -80,23 +82,44 @@ namespace EksedraEngine {
 
         private void LoadAllRooms(List<Type> gameObjectTypes) {
             DirectoryInfo levelFolder = new DirectoryInfo("rooms/");
-            List<GameObject> gameObjects = new List<GameObject>();
-            List<Vector2f> roomSizes = new List<Vector2f>();
+            Dictionary<string, List<GameObject>> gameObjects = new Dictionary<string, List<GameObject>>();
+            List<GameObject> persistantObjects = new List<GameObject>();
+            Dictionary<string, Vector2f> roomSizes = new Dictionary<string, Vector2f>();
 
             foreach(FileInfo file in levelFolder.GetFiles()) {
                 GameRoom fileRoom = RoomFromFile("rooms/" + file.Name, gameObjectTypes);
-                fileRoom.GameObjects.ForEach(obj => gameObjects.Add(obj));
-                roomSizes.Add(fileRoom.RoomSize);
+
+                for(int i = 0; i < fileRoom.GameObjects.Count; i++) {
+                    if(fileRoom.GameObjects[i].Persistant) {
+                        persistantObjects.Add(fileRoom.GameObjects[i]);
+                        fileRoom.GameObjects.RemoveAt(i);
+                        i--;
+                    }
+                }
+                gameObjects.Add(file.Name, fileRoom.GameObjects);
+                roomSizes.Add(file.Name, fileRoom.RoomSize);
             }
 
             GameObjects = gameObjects;
+            PersistantObjects = persistantObjects;
             RoomSizes = roomSizes;
         }
 
         public RenderWindow GetWindow() => Window;
         public uint GetWindowWidth() => WindowWidth;
         public uint GetWindowHeight() => WindowHeight;
-        public List<GameObject> GetGameObjects() => GameObjects;
+        public List<GameObject> GetGameObjects() {
+            List<GameObject> gameObjects = new List<GameObject>();
+
+            foreach(GameObject gameObject in GameObjects[CurrentRoom])
+                gameObjects.Add(gameObject);
+            
+            foreach(GameObject gameObject in PersistantObjects)
+                gameObjects.Add(gameObject);
+
+            return gameObjects;
+        }
+        public Vector2f GetRoomSize() => RoomSizes[CurrentRoom];
         public void SetQuit(bool quit) { Quit = quit; }
         
         private static void KeyLoop(object self) {
@@ -140,18 +163,18 @@ namespace EksedraEngine {
                     }
                 }
 
-                foreach(GameObject gameObject in (self as Engine).GetGameObjects()) {
-                    if(gameObject.Room != (self as Engine).CurrentRoom)
-                        continue;
-
+                // Get game objects will only give for current room!
+                // DO NOT USE FOREACH HERE IT WILL NOT WORK
+                List<GameObject> gameObjects = (self as Engine).GetGameObjects();
+                for(int i = 0; i < gameObjects.Count; i++) {
                     if(updateDown)
-                        gameObject.OnKeyDown((self as Engine).KeysDown);
+                        gameObjects[i].OnKeyDown((self as Engine).KeysDown);
                     if(updateHeld)
-                        gameObject.OnKeyHeld((self as Engine).KeysHeld);
+                        gameObjects[i].OnKeyHeld((self as Engine).KeysHeld);
                     if(updateUp)
-                        gameObject.OnKeyUp((self as Engine).KeysUp);
+                        gameObjects[i].OnKeyUp((self as Engine).KeysUp);
                     if(updateOff)
-                        gameObject.OnKeyOff((self as Engine).KeysOff);
+                        gameObjects[i].OnKeyOff((self as Engine).KeysOff);
                 }
             }
         }
@@ -164,27 +187,19 @@ namespace EksedraEngine {
                 DeltaTime = clock.ElapsedTime.AsSeconds();
                 clock.Restart();
 
-                foreach(GameObject gameObject in (self as Engine).GetGameObjects()) {
-                    if(gameObject.Room != (self as Engine).CurrentRoom && gameObject.Persistant)
-                        gameObject.Room = (self as Engine).CurrentRoom;
-                        
-                    if(gameObject.Room == (self as Engine).CurrentRoom)
-                        gameObject.EarlyUpdate(DeltaTime);
-                }
+                // DO NOT USE FOREACH IN ANY OF THESE IT WON'T WORK
+                List<GameObject> gameObjects = (self as Engine).GetGameObjects();
+                for(int i = 0; i < gameObjects.Count; i++)
+                    gameObjects[i].EarlyUpdate(DeltaTime);
 
-                foreach(GameObject gameObject in (self as Engine).GetGameObjects()) {
-                    if(gameObject.Room == (self as Engine).CurrentRoom)
-                        gameObject.Update(DeltaTime);
-                }
+                for(int i = 0; i < gameObjects.Count; i++)
+                        gameObjects[i].Update(DeltaTime);
 
-                foreach(GameObject gameObject in (self as Engine).GetGameObjects()) {
-                    if(gameObject.Room != (self as Engine).CurrentRoom)
-                        continue;
+                for(int i = 0; i < gameObjects.Count; i++) {
+                    gameObjects[i].LateUpdate(DeltaTime);
 
-                    gameObject.LateUpdate(DeltaTime);
-
-                    gameObject.X += gameObject.HSpeed * DeltaTime;
-                    gameObject.Y += gameObject.VSpeed * DeltaTime;
+                    gameObjects[i].X += gameObjects[i].HSpeed * DeltaTime;
+                    gameObjects[i].Y += gameObjects[i].VSpeed * DeltaTime;
 
                     //Console.WriteLine("HSpeed: " + gameObject.HSpeed + ", VSpeed: " + gameObject.VSpeed);
                 }
@@ -214,19 +229,18 @@ namespace EksedraEngine {
                 backShape.FillColor = Background;
                 Window.Draw(backShape);
                 
-                foreach(GameObject gameObject in GameObjects) {
-                    if(gameObject.Room != CurrentRoom)
-                        continue;
+                // DONT USE FOREACH
+                List<GameObject> gameObjects = GetGameObjects();
+                for(int i = 0; i < gameObjects.Count; i++) {
+                    if(gameObjects[i].SpriteIndex != null) {
+                        gameObjects[i].SpriteIndex.MoveTo(gameObjects[i].X, gameObjects[i].Y);
+                        gameObjects[i].ImageIndex += DeltaTime * gameObjects[i].ImageSpeed;
 
-                    if(gameObject.SpriteIndex != null) {
-                        gameObject.SpriteIndex.MoveTo(gameObject.X, gameObject.Y);
-                        gameObject.ImageIndex += DeltaTime * gameObject.ImageSpeed;
-
-                        gameObject.SpriteIndex.ImageSpeed = gameObject.ImageSpeed;
-                        gameObject.SpriteIndex.ImageIndex = gameObject.ImageIndex;
-                        gameObject.SpriteIndex.SetScale(gameObject.ImageScaleX, gameObject.ImageScaleY);
+                        gameObjects[i].SpriteIndex.ImageSpeed = gameObjects[i].ImageSpeed;
+                        gameObjects[i].SpriteIndex.ImageIndex = gameObjects[i].ImageIndex;
+                        gameObjects[i].SpriteIndex.SetScale(gameObjects[i].ImageScaleX, gameObjects[i].ImageScaleY);
                     }
-                    Window.Draw(gameObject);
+                    Window.Draw(gameObjects[i]);
                 }
 
                 Window.Display();
@@ -246,7 +260,7 @@ namespace EksedraEngine {
         public List<GameObject> FindGameObjectsWithTag(string tag) {
             List<GameObject> taggedObjects = new List<GameObject>();
 
-            foreach(GameObject obj in GameObjects) {
+            foreach(GameObject obj in GetGameObjects()) {
                 if(obj.Tag == tag)
                     taggedObjects.Add(obj);
             }
@@ -256,29 +270,25 @@ namespace EksedraEngine {
 
         private static void CollisionLoop(object self) {
             while((self as Engine).GetWindow().IsOpen) {
-                foreach(GameObject gameObject in (self as Engine).GameObjects) {
-                    if(gameObject.Room != (self as Engine).CurrentRoom)
-                        continue;
-
-                    foreach(GameObject other in (self as Engine).GameObjects) {
-                        if(gameObject.Room != (self as Engine).CurrentRoom)
-                            continue;
-
-                        if(!gameObject.Equals(other) && gameObject.Room == other.Room) {
+                List<GameObject> gameObjects = (self as Engine).GetGameObjects();
+                // DON'T USE FOREACH HERE
+                for(int i = 0; i < gameObjects.Count; i++) {
+                    for(int j = 0; j < gameObjects.Count; j++) {
+                        if(!gameObjects[i].Equals(gameObjects[j])) {
                             // Mask rectangle for obj 1
-                            float l1_x = gameObject.X + gameObject.MaskX;
-                            float l1_y = (self as Engine).GetWindowHeight() - (gameObject.Y + gameObject.MaskY);
-                            float r1_x = gameObject.X + gameObject.MaskX + gameObject.MaskWidth;
-                            float r1_y = (self as Engine).GetWindowHeight() - (gameObject.Y + gameObject.MaskY + gameObject.MaskHeight);
+                            float l1_x = gameObjects[i].X + gameObjects[i].MaskX;
+                            float l1_y = (self as Engine).GetWindowHeight() - (gameObjects[i].Y + gameObjects[i].MaskY);
+                            float r1_x = gameObjects[i].X + gameObjects[i].MaskX + gameObjects[i].MaskWidth;
+                            float r1_y = (self as Engine).GetWindowHeight() - (gameObjects[i].Y + gameObjects[i].MaskY + gameObjects[i].MaskHeight);
 
                             // Mask rectangle for obj 2
-                            float l2_x = other.X + other.MaskX;
-                            float l2_y = (self as Engine).GetWindowHeight() - (other.Y + other.MaskY);
-                            float r2_x = other.X + other.MaskX + other.MaskWidth;
-                            float r2_y = (self as Engine).GetWindowHeight() - (other.Y + other.MaskY + other.MaskHeight);
+                            float l2_x = gameObjects[j].X + gameObjects[j].MaskX;
+                            float l2_y = (self as Engine).GetWindowHeight() - (gameObjects[j].Y + gameObjects[j].MaskY);
+                            float r2_x = gameObjects[j].X + gameObjects[j].MaskX + gameObjects[j].MaskWidth;
+                            float r2_y = (self as Engine).GetWindowHeight() - (gameObjects[j].Y + gameObjects[j].MaskY + gameObjects[j].MaskHeight);
 
                             if(RectsIntersect(l1_x, l1_y, r1_x, r1_y, l2_x, l2_y, r2_x, r2_y))
-                                gameObject.OnCollision(other);
+                                gameObjects[i].OnCollision(gameObjects[j]);
                         }
                     }
                 }
@@ -293,16 +303,15 @@ namespace EksedraEngine {
                 DeltaTime = clock.ElapsedTime.AsSeconds();
                 clock.Restart();
 
-                foreach(GameObject gameObject in (self as Engine).GameObjects) {
-                    if(gameObject.Room != (self as Engine).CurrentRoom)
-                        continue;
-                        
+                // DO NOT USE FOREACH LOOP HERE
+                List<GameObject> gameObjects = (self as Engine).GetGameObjects();
+                for(int j = 0; j < gameObjects.Count; j++) {
                     for(int i = 0; i < 10; i++) {
-                        if(gameObject.Timers[i] > 0)
-                            gameObject.Timers[i] -= DeltaTime;
-                        else if(gameObject.Timers[i] != -1) {
-                            gameObject.Timers[i] = -1;
-                            gameObject.OnTimer(i);
+                        if(gameObjects[j].Timers[i] > 0)
+                            gameObjects[j].Timers[i] -= DeltaTime;
+                        else if(gameObjects[j].Timers[i] != -1) {
+                            gameObjects[j].Timers[i] = -1;
+                            gameObjects[j].OnTimer(i);
                         }
                     }
                 }
@@ -313,11 +322,21 @@ namespace EksedraEngine {
             Window = new RenderWindow(new VideoMode(WindowWidth, WindowHeight), WindowTitle);
             Window.Closed += (sender, args) => { (sender as RenderWindow).Close(); };
 
-            foreach(GameObject gameObject in GameObjects) {
+            foreach(string room in GameObjects.Keys) {
+                foreach(GameObject gameObject in GameObjects[room]) {
+                    gameObject.RunningEngine = this;
+                    gameObject.Init();
+                }
+
+                GameObjects[room].Sort();
+            }
+
+            foreach(GameObject gameObject in PersistantObjects) {
                 gameObject.RunningEngine = this;
                 gameObject.Init();
             }
-            GameObjects.Sort();
+            
+            PersistantObjects.Sort();
 
             Thread updateThread = new Thread(new ParameterizedThreadStart(UpdateLoop));
             Thread keyThread = new Thread(new ParameterizedThreadStart(KeyLoop));
