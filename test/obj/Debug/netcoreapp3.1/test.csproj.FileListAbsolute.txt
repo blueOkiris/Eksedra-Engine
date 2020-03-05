@@ -1,6 +1,3 @@
-D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\test\obj\Debug\netcoreapp3.1\test.csprojAssemblyReference.cache
-D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\test\obj\Debug\netcoreapp3.1\test.AssemblyInfoInputs.cache
-D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\test\obj\Debug\netcoreapp3.1\test.AssemblyInfo.cs
 D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\test\bin\Debug\netcoreapp3.1\test.exe
 D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\test\bin\Debug\netcoreapp3.1\test.deps.json
 D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\test\bin\Debug\netcoreapp3.1\test.runtimeconfig.json
@@ -71,6 +68,9 @@ D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\test\bin\Debug\netcor
 D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\test\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\openal32.dll
 D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\test\bin\Debug\netcoreapp3.1\EksedraEngine.dll
 D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\test\bin\Debug\netcoreapp3.1\EksedraEngine.pdb
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\test\obj\Debug\netcoreapp3.1\test.csprojAssemblyReference.cache
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\test\obj\Debug\netcoreapp3.1\test.AssemblyInfoInputs.cache
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\test\obj\Debug\netcoreapp3.1\test.AssemblyInfo.cs
 D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\test\obj\Debug\netcoreapp3.1\test.csproj.CopyComplete
 D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\test\obj\Debug\netcoreapp3.1\test.dll
 D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\test\obj\Debug\netcoreapp3.1\test.pdb

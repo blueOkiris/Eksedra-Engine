@@ -1,0 +1,8 @@
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\EksedraEngine\bin\Debug\netcoreapp3.1\EksedraEngine.deps.json
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\EksedraEngine\bin\Debug\netcoreapp3.1\EksedraEngine.dll
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\EksedraEngine\bin\Debug\netcoreapp3.1\EksedraEngine.pdb
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\EksedraEngine\obj\Debug\netcoreapp3.1\EksedraEngine.csprojAssemblyReference.cache
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\EksedraEngine\obj\Debug\netcoreapp3.1\EksedraEngine.AssemblyInfoInputs.cache
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\EksedraEngine\obj\Debug\netcoreapp3.1\EksedraEngine.AssemblyInfo.cs
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\EksedraEngine\obj\Debug\netcoreapp3.1\EksedraEngine.dll
+D:\MEGA\Documents\Code Projects\Video Games\Eksedra-Engine\EksedraEngine\obj\Debug\netcoreapp3.1\EksedraEngine.pdb

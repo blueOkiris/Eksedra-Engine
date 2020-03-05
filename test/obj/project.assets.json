@@ -304,7 +304,7 @@
       },
       "EksedraEngine/1.0.0": {
         "type": "project",
-        "framework": ".NETStandard,Version=v2.0",
+        "framework": ".NETCoreApp,Version=v3.1",
         "dependencies": {
           "SFML.Net": "2.5.0"
         },
