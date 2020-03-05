@@ -36,9 +36,8 @@ namespace EksedraEngine {
 
         public FloatRect ViewPort;
 
-        public Engine(uint windowWidth, uint windowHeight, string windowTitle, List<GameObject> gameObjects, List<Vector2f> roomSizes) {
-            GameObjects = gameObjects;
-            RoomSizes = roomSizes;
+        public Engine(uint windowWidth, uint windowHeight, string windowTitle, List<Type> customGameObjectTypes) {
+            LoadAllRooms(customGameObjectTypes);
 
             WindowWidth = windowWidth;
             WindowHeight = windowHeight;
@@ -61,7 +60,7 @@ namespace EksedraEngine {
             ViewPort = new FloatRect(0, 0, WindowWidth / 2, WindowHeight / 2);
         }
 
-        public static GameRoom RoomFromFile(string fileName, List<Type> gameObjectTypes) {
+        private static GameRoom RoomFromFile(string fileName, List<Type> gameObjectTypes) {
             string roomCode = File.ReadAllText(fileName);
             var asm = AppDomain.CurrentDomain.GetAssemblies().SingleOrDefault(assembly => assembly.GetName().Name == "EksedraEngine");
             ScriptOptions options = ScriptOptions.Default.WithImports(new List<string>() {
@@ -77,6 +76,21 @@ namespace EksedraEngine {
             script.Compile();
 
             return script.RunAsync().Result.ReturnValue;
+        }
+
+        private void LoadAllRooms(List<Type> gameObjectTypes) {
+            DirectoryInfo levelFolder = new DirectoryInfo("rooms/");
+            List<GameObject> gameObjects = new List<GameObject>();
+            List<Vector2f> roomSizes = new List<Vector2f>();
+
+            foreach(FileInfo file in levelFolder.GetFiles()) {
+                GameRoom fileRoom = RoomFromFile("rooms/" + file.Name, gameObjectTypes);
+                fileRoom.GameObjects.ForEach(obj => gameObjects.Add(obj));
+                roomSizes.Add(fileRoom.RoomSize);
+            }
+
+            GameObjects = gameObjects;
+            RoomSizes = roomSizes;
         }
 
         public RenderWindow GetWindow() => Window;
