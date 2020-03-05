@@ -257,7 +257,13 @@ namespace EksedraEngine {
         private static void CollisionLoop(object self) {
             while((self as Engine).GetWindow().IsOpen) {
                 foreach(GameObject gameObject in (self as Engine).GameObjects) {
+                    if(gameObject.Room != (self as Engine).CurrentRoom)
+                        continue;
+
                     foreach(GameObject other in (self as Engine).GameObjects) {
+                        if(gameObject.Room != (self as Engine).CurrentRoom)
+                            continue;
+
                         if(!gameObject.Equals(other) && gameObject.Room == other.Room) {
                             // Mask rectangle for obj 1
                             float l1_x = gameObject.X + gameObject.MaskX;
@@ -288,6 +294,9 @@ namespace EksedraEngine {
                 clock.Restart();
 
                 foreach(GameObject gameObject in (self as Engine).GameObjects) {
+                    if(gameObject.Room != (self as Engine).CurrentRoom)
+                        continue;
+                        
                     for(int i = 0; i < 10; i++) {
                         if(gameObject.Timers[i] > 0)
                             gameObject.Timers[i] -= DeltaTime;

@@ -132,10 +132,10 @@ namespace test {
     }
 
     public class Player : GameObject {
-        private float MoveSpeed = 150;
-        private float Gravity = 600;
-        private float MaxVSpeed = 400;
-        private float JumpSpeed = 370;
+        private float MoveSpeed = 300;
+        private float Gravity = 2000;
+        private float MaxVSpeed = 1500;
+        private float JumpSpeed = 700;
         private bool IsGrounded = false;
 
         public override void EarlyUpdate(float deltaTime) {}
