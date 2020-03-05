@@ -83,7 +83,7 @@ namespace test {
             MaskX = -SpriteIndex.GetWidth() / 2;
             MaskY = -SpriteIndex.GetHeight() / 2;
             MaskWidth = SpriteIndex.GetWidth();
-            MaskHeight = SpriteIndex.GetHeight();
+            MaskHeight = 9;
         }
 
         public override void Draw(RenderTarget target, RenderStates states) {
@@ -133,10 +133,10 @@ namespace test {
     }
 
     public class Player : GameObject {
-        private float MoveSpeed = 300;
-        private float Gravity = 2000;
-        private float MaxVSpeed = 1500;
-        private float JumpSpeed = 700;
+        private float MoveSpeed = 64;
+        private float Gravity = 64;
+        private float MaxVSpeed = 256;
+        private float JumpSpeed = 128;
         private bool IsGrounded = false;
 
         public override void EarlyUpdate(float deltaTime) {}
@@ -188,7 +188,9 @@ namespace test {
         public override void OnCollision(GameObject other) {
             //Console.WriteLine("Player collision with: " + other.Tag);
             //File.AppendAllText("log.txt", "Rock: " + (other.Y - other.SpriteIndex.GetCurrentRect().Height / 2) + "\n" + "Plyr: " + (Y + SpriteIndex.GetCurrentRect().Height / 2) + "\n");
-            if(other.Tag == "Rock") {
+            /* Works better with check collision
+             *
+             if(other.Tag == "Rock") {
                 if(other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 > Y + 29 && VSpeed > 0) {
                     VSpeed = 0;
                     Y = other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 - 30.25f;
@@ -215,11 +217,23 @@ namespace test {
                     Y = other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 - 30.25f;
                     IsGrounded = true;
                 }
-            }
+            }*/
         }
 
         public override void Draw(RenderTarget target, RenderStates states) {
             target.Draw(SpriteIndex);
+
+            RectangleShape hspeedLine = new RectangleShape();
+            hspeedLine.Position = new Vector2f(X, Y);
+            hspeedLine.Size = new Vector2f(HSpeed, 4);
+            hspeedLine.FillColor = Color.Red;
+            target.Draw(hspeedLine);
+            
+            RectangleShape vspeedLine = new RectangleShape();
+            vspeedLine.Position = new Vector2f(X, Y);
+            vspeedLine.Size = new Vector2f(4, VSpeed);
+            vspeedLine.FillColor = Color.Green;
+            target.Draw(vspeedLine);
         }
 
         public override void Update(float deltaTime) {
@@ -237,9 +251,44 @@ namespace test {
                 Y = -MaskY;
                 VSpeed = 0;
             }
-
-            if(VSpeed < MaxVSpeed)
+            
+            if(VSpeed < MaxVSpeed && !IsGrounded)
                 VSpeed += Gravity * deltaTime;
+
+            // Horizontal collision
+            GameObject other = null;
+            if(HSpeed > 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Rock), (self, otra) => true, ref other)) {
+                X = other.X + other.MaskX - (MaskX + MaskWidth);
+                HSpeed = 0;
+            }
+            
+            if(HSpeed < 0 && RunningEngine.CheckCollision(X + HSpeed * deltaTime, Y - 0.1f, this, typeof(Rock), (self, otra) => true, ref other)) {
+                X = other.X + other.MaskX + other.MaskWidth - MaskX;
+                HSpeed = 0;
+            }
+
+            // Vertical Collision
+            if(VSpeed > 0 && RunningEngine.CheckCollision(X, Y + VSpeed * deltaTime, this, typeof(Rock), 
+                    (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other)) {
+                Y = other.Y + other.MaskY - (MaskY + MaskHeight);
+                VSpeed = 0;
+                IsGrounded = true;
+            } else if(VSpeed > 0 && RunningEngine.CheckCollision(X, Y + VSpeed * deltaTime, this, typeof(JumpThrough), 
+                    (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other)) {
+                Y = other.Y + other.MaskY - (MaskY + MaskHeight);
+                VSpeed = 0;
+                IsGrounded = true;
+            } else if(!RunningEngine.CheckCollision(X, Y + 1, this, typeof(Rock), 
+                        (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other)
+                    && !RunningEngine.CheckCollision(X, Y + 1, this, typeof(JumpThrough), 
+                        (self, otra) => self.Y + self.MaskY + self.MaskHeight <= otra.Y + otra.MaskY, ref other))
+                IsGrounded = false;
+            
+            if(VSpeed < 0 && RunningEngine.CheckCollision(X, Y + VSpeed * deltaTime, this, typeof(Rock), 
+                    (self, otra) => self.Y + self.MaskY >= otra.Y + otra.MaskY + otra.MaskHeight, ref other)) {
+                Y = other.Y + other.MaskY + other.MaskHeight - MaskY;
+                VSpeed = 0;
+            }
 
             // Animate
             if(IsGrounded)

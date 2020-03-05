@@ -295,6 +295,33 @@ namespace EksedraEngine {
             }
         }
 
+        public bool CheckCollision(float x, float y, GameObject self, Type otherGameObjectType, Func<GameObject, GameObject, bool> test, ref GameObject other) {
+            // If my object moves to (x, y) will there be a collision?
+            List<GameObject> gameObjects = GetGameObjects();
+            for(int j = 0; j < gameObjects.Count; j++) {
+                if(gameObjects[j].GetType() == otherGameObjectType && !gameObjects[j].Equals(self)) {
+                    // Mask rectangle for obj 1
+                    float l1_x = x + self.MaskX;
+                    float l1_y = WindowHeight - (y + self.MaskY);
+                    float r1_x = x + self.MaskX + self.MaskWidth;
+                    float r1_y = WindowHeight - (y + self.MaskY + self.MaskHeight);
+
+                    // Mask rectangle for obj 2
+                    float l2_x = gameObjects[j].X + gameObjects[j].MaskX;
+                    float l2_y = WindowHeight - (gameObjects[j].Y + gameObjects[j].MaskY);
+                    float r2_x = gameObjects[j].X + gameObjects[j].MaskX + gameObjects[j].MaskWidth;
+                    float r2_y = WindowHeight - (gameObjects[j].Y + gameObjects[j].MaskY + gameObjects[j].MaskHeight);
+                    
+                    if(RectsIntersect(l1_x, l1_y, r1_x, r1_y, l2_x, l2_y, r2_x, r2_y) && test(self, gameObjects[j])) {
+                        other = gameObjects[j];
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         private static void TimerLoop(object self) {
             Clock clock = new Clock();
             float DeltaTime = 0;
