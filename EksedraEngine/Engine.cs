@@ -8,6 +8,8 @@ using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using System.IO;
 using System.Linq;
+using SFML.Audio;
+using System.Text;
 
 namespace EksedraEngine {
     public class GameRoom {
@@ -26,6 +28,8 @@ namespace EksedraEngine {
         private Dictionary<string, Vector2f> RoomSizes;
         public string CurrentRoom;
 
+        public Dictionary<string, Sound> Audio;
+
         private uint WindowWidth, WindowHeight;
         private string WindowTitle;
         private RenderWindow Window;
@@ -40,6 +44,8 @@ namespace EksedraEngine {
         public Engine(uint windowWidth, uint windowHeight, string windowTitle, string startRoom, List<Type> customGameObjectTypes) {
             CurrentRoom = startRoom;
             LoadAllRooms(customGameObjectTypes);
+
+            LoadAllMusic();
 
             WindowWidth = windowWidth;
             WindowHeight = windowHeight;
@@ -103,6 +109,28 @@ namespace EksedraEngine {
             GameObjects = gameObjects;
             PersistantObjects = persistantObjects;
             RoomSizes = roomSizes;
+        }
+
+        private void LoadAllMusic() {
+            DirectoryInfo audioFolder = new DirectoryInfo("audio/");
+            Dictionary<string, Sound> audio = new Dictionary<string, Sound>();
+
+            foreach(FileInfo file in audioFolder.GetFiles()) {
+                SoundBuffer buffer = new SoundBuffer("audio/" + file.Name);
+                Sound sound = new Sound(buffer);
+
+                StringBuilder soundName = new StringBuilder();
+                string[] periodSplit = file.Name.Split('.');
+                for(int i = 0; i < periodSplit.Length - 1; i++) {
+                    if(i > 0)
+                        soundName.Append('.');
+                    soundName.Append(periodSplit[i]);
+                }
+                
+                audio.Add(soundName.ToString(), sound);
+            }
+
+            Audio = audio;
         }
 
         public RenderWindow GetWindow() => Window;

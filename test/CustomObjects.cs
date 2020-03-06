@@ -42,6 +42,9 @@ namespace test {
         
         public override void Init() {
             Tag = "Control";
+
+            RunningEngine.Audio["overworld"].Loop = true;
+            RunningEngine.Audio["overworld"].Play();
         }
 
         public override void OnKeyDown(bool[] keyState) {
@@ -275,7 +278,11 @@ namespace test {
             if(keyState[(int) Keyboard.Key.Up] && IsGrounded) {
                 VSpeed = -JumpSpeed;
                 IsGrounded = false;
-            } else if(keyState[(int) Keyboard.Key.LShift] && RunningEngine.CurrentRoom == "test")
+
+                RunningEngine.Audio["jump"].Play();
+            }
+            
+            if(keyState[(int) Keyboard.Key.LShift] && RunningEngine.CurrentRoom == "test")
                 RunningEngine.CurrentRoom = "wide_floor";
             else if(keyState[(int) Keyboard.Key.LShift] && RunningEngine.CurrentRoom == "wide_floor")
                 RunningEngine.CurrentRoom = "test";
