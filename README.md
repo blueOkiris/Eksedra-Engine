@@ -16,8 +16,6 @@ To build the test game from source, run `dotnet publish -c Release -r win-x64 /p
 
 To build the library, open a terminal in the EksedraEngine folder and run `dotnet build`
 
-Requires SFML.net nuget package
-
 ## Credits
 
 For fun I use Link from the Legend of Zelda Minish Cap. That sprite as well as the character itself are owned by Nintendo
