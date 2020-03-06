@@ -408,6 +408,11 @@ namespace EksedraEngine {
             keyThread.Join();
             collisionThread.Join();
             timerThread.Join();
+
+            foreach(string sound in Audio.Keys) {
+                Audio[sound].Stop();
+                Audio[sound].Dispose();
+            }
         }
     }
 }
