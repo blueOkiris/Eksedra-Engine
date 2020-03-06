@@ -11,6 +11,8 @@ using System;
 namespace test {
     class Program {
         static void Main(string[] args) {
+            Console.WriteLine("Program started!");
+
             Engine engine = new Engine(
                                 1280, 720, "Eksedra Engine", "test", 
                                 new List<Type>() {
@@ -19,6 +21,8 @@ namespace test {
                                     typeof(Rock),
                                     typeof(JumpThrough)
                                 });
+
+            Console.WriteLine("Running engine!");
             engine.Run();
         }
     }

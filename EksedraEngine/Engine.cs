@@ -44,12 +44,17 @@ namespace EksedraEngine {
         public FloatRect ViewPort;
 
         public Engine(uint windowWidth, uint windowHeight, string windowTitle, string startRoom, List<Type> customGameObjectTypes) {
+            Console.Write("Loading assets...");
+
             CurrentRoom = startRoom;
             LoadAllRooms(customGameObjectTypes);
             
             LoadAllImages();
             LoadAllMusic();
             LoadAllFonts();
+
+            Console.WriteLine(" Done.");
+            Console.Write("Setting up...");
 
             WindowWidth = windowWidth;
             WindowHeight = windowHeight;
@@ -70,6 +75,8 @@ namespace EksedraEngine {
             }
 
             ViewPort = new FloatRect(0, 0, WindowWidth / 2, WindowHeight / 2);
+            
+            Console.WriteLine(" Done.");
         }
 
         private static GameRoom RoomFromFile(string fileName, List<Type> gameObjectTypes) {
