@@ -23,3 +23,5 @@ For fun I use Link from the Legend of Zelda Minish Cap. That sprite as well as t
 I want to make clear that I DO NOT use these sprites in a professional capacity, instead using them for the sake of example
 
 Same thing for overworld audio which comes from the game the Legend of Zelda: Link's Awakening
+
+Again, same thing for the jump sound, it's Mario's
