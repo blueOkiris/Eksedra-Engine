@@ -10,7 +10,9 @@ It is inspired by the style of game development shown in Gamemaker 7, 8, and 8.1
 
 ## Run
 
-To run the test game, open a terminal in the test folder and run `dotnet run`
+To run the test game, run test.exe
+
+To build the test game from source, run `dotnet publish -c Release -r win-x64 /p:PublishSingleFile=true`. This will create an executable in ".\\test\\bin\\Release\\netcoreapp3.1\\win-x64\\publish". Simply copy over the old test.exe, or run it from that folder
 
 To build the library, open a terminal in the EksedraEngine folder and run `dotnet build`
 
