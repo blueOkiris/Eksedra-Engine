@@ -133,16 +133,17 @@ namespace test {
     }
 
     public class Player : GameObject {
-        private float MoveSpeed = 64;
-        private float Gravity = 64;
-        private float MaxVSpeed = 256;
-        private float JumpSpeed = 128;
+        private float MoveSpeed = 300;
+        private float Gravity = 3500;
+        private float MaxVSpeed = 5000;
+        private float JumpSpeed = 900;
         private bool IsGrounded = false;
 
         public override void EarlyUpdate(float deltaTime) {}
         public override void LateUpdate(float deltaTime) {}
         public override void OnKeyUp(bool[]  keyState) {}
         public override void OnTimer(int timerIndex) {}
+        public override void OnCollision(GameObject other) {}
 
         private EksedraSprite PlayerStand, PlayerFall, PlayerRun;
 
@@ -185,55 +186,8 @@ namespace test {
             MaskHeight = 60;
         }
 
-        public override void OnCollision(GameObject other) {
-            //Console.WriteLine("Player collision with: " + other.Tag);
-            //File.AppendAllText("log.txt", "Rock: " + (other.Y - other.SpriteIndex.GetCurrentRect().Height / 2) + "\n" + "Plyr: " + (Y + SpriteIndex.GetCurrentRect().Height / 2) + "\n");
-            /* Works better with check collision
-             *
-             if(other.Tag == "Rock") {
-                if(other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 > Y + 29 && VSpeed > 0) {
-                    VSpeed = 0;
-                    Y = other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 - 30.25f;
-                    IsGrounded = true;
-                }
-                
-                if(other.Y + other.SpriteIndex.GetCurrentRect().Height / 2 < Y - 29 && VSpeed < 0) {
-                    VSpeed = 0;
-                    Y = other.Y + other.SpriteIndex.GetCurrentRect().Height / 2 + 30.25f;
-                }
-                
-                if(other.X - other.SpriteIndex.GetCurrentRect().Width / 2 > X + 21 && HSpeed > 0) {
-                    HSpeed = 0;
-                    X = other.X - other.SpriteIndex.GetCurrentRect().Width / 2 - 24f;
-                }
-                
-                if(other.X + other.SpriteIndex.GetCurrentRect().Width / 2 < X - 21 && HSpeed < 0) {
-                    HSpeed = 0;
-                    X = other.X + other.SpriteIndex.GetCurrentRect().Width / 2 + 24f;
-                }
-            } else if(other.Tag == "JumpThrough") {
-                if(other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 > Y + 29 && VSpeed > 0) {
-                    VSpeed = 0;
-                    Y = other.Y - other.SpriteIndex.GetCurrentRect().Height / 2 - 30.25f;
-                    IsGrounded = true;
-                }
-            }*/
-        }
-
         public override void Draw(RenderTarget target, RenderStates states) {
             target.Draw(SpriteIndex);
-
-            RectangleShape hspeedLine = new RectangleShape();
-            hspeedLine.Position = new Vector2f(X, Y);
-            hspeedLine.Size = new Vector2f(HSpeed, 4);
-            hspeedLine.FillColor = Color.Red;
-            target.Draw(hspeedLine);
-            
-            RectangleShape vspeedLine = new RectangleShape();
-            vspeedLine.Position = new Vector2f(X, Y);
-            vspeedLine.Size = new Vector2f(4, VSpeed);
-            vspeedLine.FillColor = Color.Green;
-            target.Draw(vspeedLine);
         }
 
         public override void Update(float deltaTime) {
