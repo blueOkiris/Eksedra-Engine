@@ -29,6 +29,8 @@ namespace EksedraEngine {
         public string CurrentRoom;
 
         public Dictionary<string, Sound> Audio;
+        public Dictionary<string, Font> Fonts;
+        public Dictionary<string, Texture> Images;
 
         private uint WindowWidth, WindowHeight;
         private string WindowTitle;
@@ -44,8 +46,10 @@ namespace EksedraEngine {
         public Engine(uint windowWidth, uint windowHeight, string windowTitle, string startRoom, List<Type> customGameObjectTypes) {
             CurrentRoom = startRoom;
             LoadAllRooms(customGameObjectTypes);
-
+            
+            LoadAllImages();
             LoadAllMusic();
+            LoadAllFonts();
 
             WindowWidth = windowWidth;
             WindowHeight = windowHeight;
@@ -131,6 +135,48 @@ namespace EksedraEngine {
             }
 
             Audio = audio;
+        }
+
+        private void LoadAllFonts() {
+            DirectoryInfo fontFolder = new DirectoryInfo("fonts/");
+            Dictionary<string, Font> fonts = new Dictionary<string, Font>();
+
+            foreach(FileInfo file in fontFolder.GetFiles()) {
+                Font font = new Font("fonts/" + file.Name);
+
+                StringBuilder fontName = new StringBuilder();
+                string[] periodSplit = file.Name.Split('.');
+                for(int i = 0; i < periodSplit.Length - 1; i++) {
+                    if(i > 0)
+                        fontName.Append('.');
+                    fontName.Append(periodSplit[i]);
+                }
+                
+                fonts.Add(fontName.ToString(), font);
+            }
+
+            Fonts = fonts;
+        }
+
+        private void LoadAllImages() {
+            DirectoryInfo imageFolder = new DirectoryInfo("images/");
+            Dictionary<string, Texture> images = new Dictionary<string, Texture>();
+
+            foreach(FileInfo file in imageFolder.GetFiles()) {
+                Texture texture = new Texture("images/" + file.Name);
+
+                StringBuilder textureName = new StringBuilder();
+                string[] periodSplit = file.Name.Split('.');
+                for(int i = 0; i < periodSplit.Length - 1; i++) {
+                    if(i > 0)
+                        textureName.Append('.');
+                    textureName.Append(periodSplit[i]);
+                }
+                
+                images.Add(textureName.ToString(), texture);
+            }
+
+            Images = images;
         }
 
         public RenderWindow GetWindow() => Window;

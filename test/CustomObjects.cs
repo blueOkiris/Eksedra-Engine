@@ -30,7 +30,6 @@ namespace test {
     }*/
 
     public class ControlObject : GameObject {
-        public override void Draw(RenderTarget target, RenderStates states) {}
         public override void EarlyUpdate(float deltaTime) {}
         public override void LateUpdate(float deltaTime) {}
         public override void OnKeyUp(bool[] keyState) {}
@@ -51,8 +50,17 @@ namespace test {
             if(keyState[(int) Keyboard.Key.Escape])
                 RunningEngine.SetQuit(true);
         }
+        
         public ControlObject() {
             Persistant = true;
+        }
+
+        public override void Draw(RenderTarget target, RenderStates states) {
+            Text text = new Text("Eksedra Engine Test Demo", RunningEngine.Fonts["JosefinSans"], 20);
+            text.Position = new Vector2f(RunningEngine.ViewPort.Left + 32, RunningEngine.ViewPort.Top + 32);
+            text.FillColor = Color.Black;
+
+            target.Draw(text);
         }
     }
 
@@ -79,7 +87,7 @@ namespace test {
             Tag = "JumpThrough";
             Depth = 1;
 
-            SpriteIndex = new EksedraSprite("images/jumpthrough.png", new IntRect[] { new IntRect(0, 0, 64, 64) });
+            SpriteIndex = new EksedraSprite(RunningEngine.Images["jumpthrough"], new IntRect[] { new IntRect(0, 0, 64, 64) });
             ImageSpeed = 0;
             ImageIndex = 0;
 
@@ -116,7 +124,7 @@ namespace test {
             Tag = "Rock";
             Depth = 1;
 
-            SpriteIndex = new EksedraSprite("images/rock.png", new IntRect[] { new IntRect(0, 0, 64, 64) });
+            SpriteIndex = new EksedraSprite(RunningEngine.Images["rock"], new IntRect[] { new IntRect(0, 0, 64, 64) });
             ImageSpeed = 0;
             ImageIndex = 0;
 
@@ -160,13 +168,13 @@ namespace test {
             Tag = "Player";
             Depth = 0;
 
-            PlayerStand = new EksedraSprite("images/link-minish.png", new IntRect[] {
+            PlayerStand = new EksedraSprite(RunningEngine.Images["link-minish"], new IntRect[] {
                                                 new IntRect(0, 404, 120, 116)
                                             });
-            PlayerFall = new EksedraSprite("images/link-minish.png", new IntRect[] {
+            PlayerFall = new EksedraSprite(RunningEngine.Images["link-minish"], new IntRect[] {
                                                 new IntRect(120 * 7, 924, 120, 116)
                                             });
-            PlayerRun = new EksedraSprite("images/link-minish.png", new IntRect[] {
+            PlayerRun = new EksedraSprite(RunningEngine.Images["link-minish"], new IntRect[] {
                                                 new IntRect(0, 924, 120, 116),
                                                 new IntRect(120, 924, 120, 116),
                                                 new IntRect(120 * 2, 924, 120, 116),
@@ -183,14 +191,20 @@ namespace test {
 
             SpriteIndex = PlayerStand;
             ImageSpeed = 10;
-            MaskX = -22;
+            MaskX = -8;
             MaskY = -30;
-            MaskWidth = 44;
+            MaskWidth = 16;
             MaskHeight = 60;
         }
 
         public override void Draw(RenderTarget target, RenderStates states) {
             target.Draw(SpriteIndex);
+
+            /*RectangleShape mask = new RectangleShape();
+            mask.FillColor = Color.Black;
+            mask.Position = new Vector2f(X + MaskX, Y + MaskY);
+            mask.Size = new Vector2f(MaskWidth, MaskHeight);
+            target.Draw(mask);*/
         }
 
         public override void Update(float deltaTime) {

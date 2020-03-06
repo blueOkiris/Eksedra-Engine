@@ -8,16 +8,17 @@ namespace EksedraEngine {
         public float ImageIndex;
 
         private Texture Source;
-        private bool Smooth;
         private IntRect[] SourceRects;
         private float X, Y, XScale, YScale;
+        public bool Smooth;
         
         public uint GetWidth() => Source.Size.X;
         public uint GetHeight() => Source.Size.Y;
         public IntRect GetCurrentRect() => SourceRects[(int) Math.Floor(ImageIndex) % SourceRects.Length];
 
-        public EksedraSprite(string fileName, IntRect[] sourceRects) {
-            Source = new Texture(fileName);
+        public EksedraSprite(Texture source, IntRect[] sourceRects) {
+            //Source = new Texture(fileName);
+            Source = source;
             Source.Smooth = true;
 
             X = 0;
