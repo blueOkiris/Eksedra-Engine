@@ -71,7 +71,7 @@ namespace EksedraEngine {
             RunningEngine = engine;
             Persistant = false;
             Tag = "";
-            Timers = new float[10] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            Timers = new float[10] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
         }
         public virtual int CompareTo(GameObject other) => other.Depth.CompareTo(Depth);
     }

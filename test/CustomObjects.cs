@@ -23,10 +23,7 @@ namespace test {
         public override void OnKeyHeld(bool[] keyState) {}
         public override void OnCollision(GameObject other) {}
         public override void OnTimer(int timerIndex) {}
-
-        public ObjectName(int room) {
-            Room = room;
-        }
+        public ObjectName() { }
     }*/
 
     public class ControlObject : GameObject {
