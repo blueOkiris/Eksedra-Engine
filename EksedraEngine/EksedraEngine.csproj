@@ -9,5 +9,5 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Scripting" Version="3.4.0" />
     <PackageReference Include="SFML.Net" Version="2.5.0" />
   </ItemGroup>
-
+  
 </Project>

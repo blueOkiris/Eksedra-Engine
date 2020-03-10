@@ -7,10 +7,24 @@ using System.Collections.Generic;
 using SFML.System;
 using EksedraEngine;
 using System;
+using System.Runtime.InteropServices;
 
 namespace test {
     class Program {
+        #if _WINDOWS
+        #else
+            // Must happen on linux or else threads will crash X11
+            [DllImport("X11")]
+            extern public static int XInitThreads();
+        #endif
+        
         static void Main(string[] args) {
+            #if _WINDOWS
+            #else
+                // Required for threads on linux to work
+                XInitThreads();
+            #endif
+
             Console.WriteLine("Program started!");
 
             Engine engine = new Engine(

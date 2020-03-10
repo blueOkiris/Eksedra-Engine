@@ -11,7 +11,7 @@ using System.Linq;
 using SFML.Audio;
 using System.Text;
 
-namespace EksedraEngine {
+namespace EksedraEngine {        
     public class GameRoom {
         public List<GameObject> GameObjects;
         public Vector2f RoomSize;
@@ -287,53 +287,47 @@ namespace EksedraEngine {
             }
         }
 
-        private void DrawLoop() {
-            Clock clock = new Clock();
-            float DeltaTime = 0;
+        // Also the main loop
+        private void DrawLoopFunction(float deltaTime) {
+            Window.SetView(new View(ViewPort));
+            Window.Clear();
+
+            // Back rect
+            RectangleShape backShape = new RectangleShape(new Vector2f(RoomSizes[CurrentRoom].X, RoomSizes[CurrentRoom].Y));
+            backShape.Position = new Vector2f(0, 0);
+            backShape.FillColor = Background;
+            Window.Draw(backShape);
             
-            while(Window.IsOpen) {
-                do {
-                    DeltaTime = clock.ElapsedTime.AsSeconds();
-                } while(DeltaTime < (float) 1 / 30);
-                clock.Restart();
+            // DONT USE FOREACH
+            List<GameObject> gameObjects = GetGameObjects();
+            for(int i = 0; i < gameObjects.Count; i++) {
+                // Mask rectangle for obj 1
+                /*float l1_x = gameObjects[i].X + gameObjects[i].MaskX;
+                float l1_y = WindowHeight - (gameObjects[i].Y + gameObjects[i].MaskY);
+                float r1_x = gameObjects[i].X + gameObjects[i].MaskX + gameObjects[i].MaskWidth;
+                float r1_y = WindowHeight - (gameObjects[i].Y + gameObjects[i].MaskY + gameObjects[i].MaskHeight);
 
-                Window.DispatchEvents();
-                if(Quit)
-                    Window.Close();
+                // Mask rectangle for obj 2
+                float l2_x = ViewPort.Left;
+                float l2_y = WindowHeight - ViewPort.Top;
+                float r2_x = ViewPort.Left + ViewPort.Width;
+                float r2_y = WindowHeight - (ViewPort.Top - ViewPort.Height);
 
-                Window.SetView(new View(ViewPort));
-                Window.Clear();
+                if(gameObjects[i].Cull && !RectsIntersect(l1_x, l1_y, r1_x, r1_y, l2_x, l2_y, r2_x, r2_y))
+                    continue;*/
 
-                // Back rect
-                RectangleShape backShape = new RectangleShape(new Vector2f(RoomSizes[CurrentRoom].X, RoomSizes[CurrentRoom].Y));
-                backShape.Position = new Vector2f(0, 0);
-                backShape.FillColor = Background;
-                Window.Draw(backShape);
-                
-                // DONT USE FOREACH
-                List<GameObject> gameObjects = GetGameObjects();
-                for(int i = 0; i < gameObjects.Count; i++) {
-                    /*if(gameObjects[i].Cull 
-                            && RectsIntersect(
-                                ViewPort.Left, ViewPort.Top, ViewPort.Left + ViewPort.Width, ViewPort.Top + ViewPort.Height,
-                                gameObjects[i].X + gameObjects[i].MaskX, gameObjects[i].Y + gameObjects[i].MaskY,
-                                    gameObjects[i].X + gameObjects[i].MaskX + gameObjects[i].MaskWidth,
-                                    gameObjects[i].Y + gameObjects[i].MaskY + gameObjects[i].MaskHeight))
-                        continue;*/
+                if(gameObjects[i].SpriteIndex != null) {
+                    gameObjects[i].SpriteIndex.MoveTo(gameObjects[i].X, gameObjects[i].Y);
+                    gameObjects[i].ImageIndex += deltaTime * gameObjects[i].ImageSpeed;
 
-                    if(gameObjects[i].SpriteIndex != null) {
-                        gameObjects[i].SpriteIndex.MoveTo(gameObjects[i].X, gameObjects[i].Y);
-                        gameObjects[i].ImageIndex += DeltaTime * gameObjects[i].ImageSpeed;
-
-                        gameObjects[i].SpriteIndex.ImageSpeed = gameObjects[i].ImageSpeed;
-                        gameObjects[i].SpriteIndex.ImageIndex = gameObjects[i].ImageIndex;
-                        gameObjects[i].SpriteIndex.SetScale(gameObjects[i].ImageScaleX, gameObjects[i].ImageScaleY);
-                    }
-                    Window.Draw(gameObjects[i]);
+                    gameObjects[i].SpriteIndex.ImageSpeed = gameObjects[i].ImageSpeed;
+                    gameObjects[i].SpriteIndex.ImageIndex = gameObjects[i].ImageIndex;
+                    gameObjects[i].SpriteIndex.SetScale(gameObjects[i].ImageScaleX, gameObjects[i].ImageScaleY);
                 }
-
-                Window.Display();
+                Window.Draw(gameObjects[i]);
             }
+
+            Window.Display();
         }
 
         private static bool RectsIntersect(float l1_x, float l1_y, float r1_x, float r1_y, float l2_x, float l2_y, float r2_x, float r2_y) {
@@ -463,7 +457,22 @@ namespace EksedraEngine {
             collisionThread.Start(this);
             timerThread.Start(this);
 
-            DrawLoop();
+            Clock clock = new Clock();
+            float DeltaTime = 0;
+            
+            while(Window.IsOpen) {
+                do {
+                    DeltaTime = clock.ElapsedTime.AsSeconds();
+                } while(DeltaTime < (float) 1 / 30);
+                clock.Restart();
+
+                //Console.WriteLine("Dispatching events");
+                Window.DispatchEvents();
+                if(Quit)
+                    Window.Close();
+
+                DrawLoopFunction(DeltaTime);
+            }
 
             updateThread.Join();
             keyThread.Join();
