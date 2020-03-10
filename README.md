@@ -6,7 +6,7 @@ A 2D game engine written in C# for use in my games that I'm releasing to the pub
 
 It is inspired by the style of game development shown in Gamemaker 7, 8, and 8.1, but is only code, not a GUI.
 
-<img src="https://github.com/blueOkiris/Eksedra-Engine/blob/master/docs/example-image.PNG" width="640" />
+<img src="https://github.com/blueOkiris/Eksedra-Engine/blob/master/docs/example-image.png" width="640" />
 
 ## Run
 
