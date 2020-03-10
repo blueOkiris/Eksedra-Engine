@@ -16,6 +16,19 @@ To run the test game, run test.exe
 
 To build the test game from source, run `dotnet publish -c Release -r win-x64 /p:PublishSingleFile=true`. This will create an executable in ".\\test\\bin\\Release\\netcoreapp3.1\\win-x64\\publish". Simply copy over the old test.exe, or run it from that folder
 
+### Linux
+
+To build from source run:
+
+```
+export PublishSingleFile=true
+dotnet publish -c Release -r linux-x64
+```
+
+The binary will be in "./test/bin/Release/netcoreapp3.1/linux-x64/publish"
+
+### Library build
+
 To build the library, open a terminal in the EksedraEngine folder and run `dotnet build`
 
 ## Credits
