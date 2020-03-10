@@ -22,6 +22,8 @@ namespace test {
             #if _WINDOWS
             #else
                 // Required for threads on linux to work
+                // Must be called before anything else not just before window unfotunately.
+                // Thus can't be part of lib
                 XInitThreads();
             #endif
 
