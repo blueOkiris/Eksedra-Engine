@@ -302,7 +302,7 @@ namespace EksedraEngine {
             List<GameObject> gameObjects = GetGameObjects();
             for(int i = 0; i < gameObjects.Count; i++) {
                 // Mask rectangle for obj 1
-                /*float l1_x = gameObjects[i].X + gameObjects[i].MaskX;
+                float l1_x = gameObjects[i].X + gameObjects[i].MaskX;
                 float l1_y = WindowHeight - (gameObjects[i].Y + gameObjects[i].MaskY);
                 float r1_x = gameObjects[i].X + gameObjects[i].MaskX + gameObjects[i].MaskWidth;
                 float r1_y = WindowHeight - (gameObjects[i].Y + gameObjects[i].MaskY + gameObjects[i].MaskHeight);
@@ -311,10 +311,15 @@ namespace EksedraEngine {
                 float l2_x = ViewPort.Left;
                 float l2_y = WindowHeight - ViewPort.Top;
                 float r2_x = ViewPort.Left + ViewPort.Width;
-                float r2_y = WindowHeight - (ViewPort.Top - ViewPort.Height);
+                float r2_y = WindowHeight - (ViewPort.Top + ViewPort.Height);
+
+                /*if(gameObjects[i].Tag == "Player") {
+                    Console.WriteLine("Viewport Rect: { (" + l2_x + ", " + l2_y + "), (" + r2_x + ", " + r2_y + ") }");
+                    Console.WriteLine("Player Rect: { (" + l1_x + ", " + l1_y + "), (" + r1_x + ", " + r1_y + ") }");
+                }*/
 
                 if(gameObjects[i].Cull && !RectsIntersect(l1_x, l1_y, r1_x, r1_y, l2_x, l2_y, r2_x, r2_y))
-                    continue;*/
+                    continue;
 
                 if(gameObjects[i].SpriteIndex != null) {
                     gameObjects[i].SpriteIndex.MoveTo(gameObjects[i].X, gameObjects[i].Y);
