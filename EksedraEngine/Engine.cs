@@ -313,6 +313,14 @@ namespace EksedraEngine {
                 // DONT USE FOREACH
                 List<GameObject> gameObjects = GetGameObjects();
                 for(int i = 0; i < gameObjects.Count; i++) {
+                    /*if(gameObjects[i].Cull 
+                            && RectsIntersect(
+                                ViewPort.Left, ViewPort.Top, ViewPort.Left + ViewPort.Width, ViewPort.Top + ViewPort.Height,
+                                gameObjects[i].X + gameObjects[i].MaskX, gameObjects[i].Y + gameObjects[i].MaskY,
+                                    gameObjects[i].X + gameObjects[i].MaskX + gameObjects[i].MaskWidth,
+                                    gameObjects[i].Y + gameObjects[i].MaskY + gameObjects[i].MaskHeight))
+                        continue;*/
+
                     if(gameObjects[i].SpriteIndex != null) {
                         gameObjects[i].SpriteIndex.MoveTo(gameObjects[i].X, gameObjects[i].Y);
                         gameObjects[i].ImageIndex += DeltaTime * gameObjects[i].ImageSpeed;

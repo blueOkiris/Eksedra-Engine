@@ -30,6 +30,7 @@ namespace EksedraEngine {
         public Engine RunningEngine;
 
         public string Tag;
+        public bool Cull;
 
         public abstract void Draw(RenderTarget target, RenderStates states);
         public abstract void Init();
@@ -72,6 +73,7 @@ namespace EksedraEngine {
             Persistant = false;
             Tag = "";
             Timers = new float[10] { -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 };
+            Cull = true;
         }
         public virtual int CompareTo(GameObject other) => other.Depth.CompareTo(Depth);
     }

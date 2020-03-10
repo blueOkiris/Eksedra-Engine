@@ -50,6 +50,7 @@ namespace test {
         
         public ControlObject() {
             Persistant = true;
+            Cull = false;
         }
 
         public override void Draw(RenderTarget target, RenderStates states) {
