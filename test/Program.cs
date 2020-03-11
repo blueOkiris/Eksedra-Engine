@@ -36,7 +36,8 @@ namespace test {
                                     typeof(Player),
                                     typeof(Rock),
                                     typeof(JumpThrough)
-                                });
+                                },
+                                "test");
 
             Console.WriteLine("Running engine!");
             engine.Run();

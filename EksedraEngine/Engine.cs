@@ -43,11 +43,11 @@ namespace EksedraEngine {
 
         public FloatRect ViewPort;
 
-        public Engine(uint windowWidth, uint windowHeight, string windowTitle, string startRoom, List<Type> customGameObjectTypes) {
+        public Engine(uint windowWidth, uint windowHeight, string windowTitle, string startRoom, List<Type> customGameObjectTypes, string projectNamespace) {
             Console.Write("Loading assets...");
 
             CurrentRoom = startRoom;
-            LoadAllRooms(customGameObjectTypes);
+            LoadAllRooms(customGameObjectTypes, projectNamespace);
             
             LoadAllImages();
             LoadAllMusic();
@@ -79,14 +79,14 @@ namespace EksedraEngine {
             Console.WriteLine(" Done.");
         }
 
-        private static GameRoom RoomFromFile(string fileName, List<Type> gameObjectTypes) {
+        private static GameRoom RoomFromFile(string fileName, List<Type> gameObjectTypes, string projectNamespace) {
             string roomCode = File.ReadAllText(fileName);
             var asm = AppDomain.CurrentDomain.GetAssemblies().SingleOrDefault(assembly => assembly.GetName().Name == "EksedraEngine");
             ScriptOptions options = ScriptOptions.Default.WithImports(new List<string>() {
                                         "System.Collections.Generic",
                                         "SFML.System",
                                         "EksedraEngine",
-                                        "test"
+                                        projectNamespace
                                     }).AddReferences(asm);
             foreach(Type t in gameObjectTypes)
                 options = options.AddReferences(t.Assembly);
@@ -97,14 +97,14 @@ namespace EksedraEngine {
             return script.RunAsync().Result.ReturnValue;
         }
 
-        private void LoadAllRooms(List<Type> gameObjectTypes) {
+        private void LoadAllRooms(List<Type> gameObjectTypes, string projectNamespace) {
             DirectoryInfo levelFolder = new DirectoryInfo("rooms/");
             Dictionary<string, List<GameObject>> gameObjects = new Dictionary<string, List<GameObject>>();
             List<GameObject> persistantObjects = new List<GameObject>();
             Dictionary<string, Vector2f> roomSizes = new Dictionary<string, Vector2f>();
 
             foreach(FileInfo file in levelFolder.GetFiles()) {
-                GameRoom fileRoom = RoomFromFile("rooms/" + file.Name, gameObjectTypes);
+                GameRoom fileRoom = RoomFromFile("rooms/" + file.Name, gameObjectTypes, projectNamespace);
 
                 for(int i = 0; i < fileRoom.GameObjects.Count; i++) {
                     if(fileRoom.GameObjects[i].Persistant) {
