@@ -387,7 +387,7 @@ namespace EksedraEngine {
             // If my object moves to (x, y) will there be a collision?
             List<GameObject> gameObjects = GetGameObjects();
             for(int j = 0; j < gameObjects.Count; j++) {
-                if(gameObjects[j].GetType() == otherGameObjectType && !gameObjects[j].Equals(self)) {
+                if(gameObjects[j].GetType() == otherGameObjectType || gameObjects[j].GetType().BaseType == otherGameObjectType && !gameObjects[j].Equals(self)) {
                     // Mask rectangle for obj 1
                     float l1_x = x + self.MaskX;
                     float l1_y = WindowHeight - (y + self.MaskY);
