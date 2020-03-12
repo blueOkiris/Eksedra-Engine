@@ -42,8 +42,17 @@ namespace EksedraEngine {
         public Color Background = Color.Yellow;
 
         public FloatRect ViewPort;
+        public bool QuitLoading = false;
 
-        public Engine(uint windowWidth, uint windowHeight, string windowTitle, string startRoom, List<Type> customGameObjectTypes, string projectNamespace) {
+        public Engine(uint windowWidth, uint windowHeight, string windowTitle, string startRoom, List<Type> customGameObjectTypes, string projectNamespace, EksedraSprite loadingSprite) {
+            Thread loadingThread = null;
+
+            if(loadingSprite != null) {
+                loadingThread = new Thread(new ParameterizedThreadStart(DrawLoadingScreen));
+                loadingThread.Start(new LoadingScreen(loadingSprite, this));
+                QuitLoading = false;
+            }
+
             Console.Write("Loading assets...");
 
             CurrentRoom = startRoom;
@@ -54,6 +63,12 @@ namespace EksedraEngine {
             LoadAllFonts();
 
             Console.WriteLine(" Done.");
+
+            if(loadingThread != null) {
+                QuitLoading = true;
+                loadingThread.Join();
+            }
+
             Console.Write("Setting up...");
 
             WindowWidth = windowWidth;
@@ -77,6 +92,33 @@ namespace EksedraEngine {
             ViewPort = new FloatRect(0, 0, WindowWidth / 2, WindowHeight / 2);
             
             Console.WriteLine(" Done.");
+        }
+
+        class LoadingScreen {
+            public EksedraSprite Spr;
+            public Engine RunningEngine;
+
+            public LoadingScreen(EksedraSprite sprite, Engine engine) {
+                Spr = sprite;
+                RunningEngine = engine;
+            }
+        }
+
+        private static void DrawLoadingScreen(object loadingSprite) {
+            RenderWindow window = new RenderWindow(
+                                    new VideoMode((loadingSprite as LoadingScreen).Spr.GetWidth(), 
+                                                    (loadingSprite as LoadingScreen).Spr.GetHeight()), "Loading");
+
+            while(window.IsOpen) {
+                window.Clear();
+                window.DispatchEvents();
+                (loadingSprite as LoadingScreen).Spr.MoveTo((loadingSprite as LoadingScreen).Spr.GetWidth() / 2, (loadingSprite as LoadingScreen).Spr.GetHeight() / 2);
+                window.Draw((loadingSprite as LoadingScreen).Spr);
+                window.Display();
+
+                if((loadingSprite as LoadingScreen).RunningEngine.QuitLoading)
+                    window.Close();
+            }
         }
 
         private static GameRoom RoomFromFile(string fileName, List<Type> gameObjectTypes, string projectNamespace) {

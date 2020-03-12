@@ -8,6 +8,7 @@ using SFML.System;
 using EksedraEngine;
 using System;
 using System.Runtime.InteropServices;
+using SFML.Graphics;
 
 namespace test {
     class Program {
@@ -29,6 +30,7 @@ namespace test {
 
             Console.WriteLine("Program started!");
 
+            EksedraSprite loadingSprite = new EksedraSprite(new Texture("images/face.png"), new IntRect[] { new IntRect(0, 0, 64, 64) });
             Engine engine = new Engine(
                                 1280, 720, "Eksedra Engine", "test", 
                                 new List<Type>() {
@@ -37,7 +39,7 @@ namespace test {
                                     typeof(Rock),
                                     typeof(JumpThrough)
                                 },
-                                "test");
+                                "test", loadingSprite);
 
             Console.WriteLine("Running engine!");
             engine.Run();
