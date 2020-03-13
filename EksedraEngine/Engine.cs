@@ -302,6 +302,9 @@ namespace EksedraEngine {
             }
         }
 
+        public void AddGameObject(GameObject newGameObject) => GameObjects[CurrentRoom].Add(newGameObject);
+        public void RemoveGameObject(GameObject oldGameObject) => GameObjects[CurrentRoom].Remove(oldGameObject);
+
         private static void UpdateLoop(object self) {
             Clock clock = new Clock();
             float DeltaTime = 0;
